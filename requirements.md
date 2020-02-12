@@ -2,7 +2,7 @@
 
 ## Get link list
 
-It uses BeautifulSoup for scrape the main page and fetch a list of links searching by CSS selector. This is customized by a parameter.
+It uses BeautifulSoup to scrape the main page and fetch a list of links searching by CSS selector. This is customized by a parameter.
 
 The link list should be written to a file in the following format:
 
