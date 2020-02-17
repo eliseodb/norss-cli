@@ -1,8 +1,27 @@
 import requests, textwrap, subprocess, sys
 from bs4 import BeautifulSoup
 
-def get_link_list():
-    url = 'https://www.lmneuquen.com'
+# Sources definition
+sources = {
+    'lmneuquen': {
+        'url': 'https://www.lmneuquen.com',
+        'link_selector': '.title a',
+        'text_selector': 'div.cuerpo p'
+    },
+    'genbeta': {
+        'url': 'https://www.genbeta.com',
+        'link_selector': 'h2.abstract-title a',
+        'text_selector': 'div.js-post-images-container p'
+    }
+}
+
+def get_link_list(source):
+    if source not in sources:
+        print('Source ' + source + ' not found')
+        return False
+
+    url = sources[source]['url']
+    print(url)
 
     page = requests.get(url)
 
@@ -17,7 +36,7 @@ def get_link_list():
     n = 1
     links = ''
 
-    for link in soup.select('.title a'):
+    for link in soup.select(sources[source]['link_selector']):
         print(str(n) + '|' + link.getText())
         links += str(n) + '|' + link.getText()
         file.write(str(n) + '|' + link['href'] + '|' + link.getText() + '\n')
@@ -69,4 +88,5 @@ def get_article(url):
     print(content)
     return content
 
-get_article_by_number(20)
+#get_link_list('genbeta')
+get_article_by_number(9)
