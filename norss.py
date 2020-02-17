@@ -31,7 +31,7 @@ def get_link_list(source):
     soup = BeautifulSoup(page.content, 'html.parser')
 
     # Save in a file
-    file = open('__norss_links.txt', 'w+')
+    file = open('__norss_' + source + '.txt', 'w+')
 
     n = 1
     links = ''
@@ -48,8 +48,9 @@ def get_link_list(source):
     return links
 
 
-def get_article_by_number(number):
-    path = '__norss_links.txt'
+def get_article_by_number(source, number):
+    # TODO Check if file exists
+    path = '__norss_' + source + '.txt'
 
     with open(path) as file:
         line = file.readline()
@@ -57,22 +58,18 @@ def get_article_by_number(number):
 
         while line:
             data = line.split('|')
-            print(data)
-            print(str(data[0]) + ' - ' + str(number))
 
             if data[0] == str(number):
                 url = data[1]
-                #print("va a pasar por el llamado!")
-                #print(url)
-                return get_article(url)
+                return get_article(source, url)
 
             line = file.readline()
 
     return False
 
 
-def get_article(url):
-    print("pasa por get article")
+def get_article(source, url):
+    # TODO Check if source definition exists
     page = requests.get(url)
 
     if page.status_code != 200:
@@ -82,11 +79,11 @@ def get_article(url):
 
     content = '# ' + soup.title.string + '\r\n'
 
-    for i in soup.select('div.cuerpo p'):
+    for i in soup.select(sources[source]['text_selector']):
         content += i.text + '\r\n'
 
     print(content)
     return content
 
 #get_link_list('genbeta')
-get_article_by_number(9)
+get_article_by_number('lmneuquen', 20)
